@@ -14,6 +14,9 @@ namespace CS321_W5D2_BlogAPI.Core.Models
         public int BlogId { get; set; }
         public Blog Blog { get; set; }
 
+        public AppUser User { get; set; }
+
+
         public ICollection<Comment> Comments { get; set; }
     }
 }

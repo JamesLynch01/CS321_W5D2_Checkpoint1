@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CS321_W5D2_BlogAPI.ApiModels;
@@ -19,8 +20,9 @@ namespace CS321_W5D2_BlogAPI.Controllers
         private readonly IBlogService _blogService;
 
         // TODO: inject BlogService
-        public BlogsController()
+        public BlogsController(IBlogService blogService)
         {
+            _blogService = blogService;
         }
 
         // GET: api/blogs
@@ -30,17 +32,11 @@ namespace CS321_W5D2_BlogAPI.Controllers
         {
             try
             {
+                var omiBlogs = _blogService.GetAll().ToApiModels();
+
+                return Ok(omiBlogs);
                 // TODO: replace the code below with the correct implementation
                 // to return all blogs
-                return Ok(new BlogModel[] {
-                    new BlogModel
-                    {
-                        Id = 1,
-                        Name = "Fix Me!",
-                        Description = "Implement GET /api/blogs",
-                        AuthorName = "unknown",
-                    }
-                });
             }
             catch (Exception ex)
             {
@@ -58,13 +54,9 @@ namespace CS321_W5D2_BlogAPI.Controllers
             {
                 // TODO: replace the code below with the correct implementation
                 // to return a blog by id
-                return Ok(new BlogModel
-                {
-                    Id = id,
-                    Name = "Fix Me!",
-                    Description = "Implement GET /api/blogs/{id}",
-                    AuthorName = "unknown",
-                });
+                var correctBlog = _blogService.Get(id);
+                if (correctBlog == null) return NotFound();
+                return Ok(correctBlog.ToApiModel());
             }
             catch (Exception ex)
             {
